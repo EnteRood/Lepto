@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LeptoWM</title>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+		<link rel="stylesheet" href="css/MarkerCluster.css" />
+		<link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+		<link rel="stylesheet" type="text/css" href="css/own_style.css">
+		<link rel="stylesheet" href="css/label.css" />
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+		<script src="js/leaflet-hash.js"></script>
+		<script src="js/label.js"></script>
+		<script src="js/Autolinker.min.js"></script>
+		<script src="js/leaflet.markercluster.js"></script>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+	</head>
+	<body>
+		<div id="map"></div>
+		<script src="data/exp_GemLeptoRD.js"></script>
+		<script>
+		var map = L.map('map', {
+			zoomControl:true, maxZoom:19
+		}).fitBounds([[50.6562670159,2.98526765455],[53.6087432557,7.67539793678]]);
+		var hash = new L.Hash(map);
+		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">qgis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
+		var feature_group = new L.featureGroup([]);
+		var raster_group = new L.LayerGroup([]);
+		var basemap_0 = L.tileLayer('http://openmapsurfer.uni-hd.de/tiles/roadsg/x={x}&y={y}&z={z}', { 
+			attribution: additional_attrib + 'Imagery from <a href="http://giscience.uni-hd.de/">GIScience Research Group @ University of Heidelberg</a> &mdash; Map data: &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>'
+		});	
+		basemap_0.addTo(map);	
+		var layerOrder=new Array();
+		function pop_GemLeptoRD(feature, layer) {					
+			var popupContent = '<table><tr><th scope="row">GM_CODE</th><td>' + Autolinker.link(String(feature.properties['GM_CODE'])) + '</td></tr><tr><th scope="row">GM_NAAM</th><td>' + Autolinker.link(String(feature.properties['GM_NAAM'])) + '</td></tr><tr><th scope="row">POSTCODE</th><td>' + Autolinker.link(String(feature.properties['POSTCODE'])) + '</td></tr><tr><th scope="row">DEK_PERC</th><td>' + Autolinker.link(String(feature.properties['DEK_PERC'])) + '</td></tr><tr><th scope="row">OPP_TOT</th><td>' + Autolinker.link(String(feature.properties['OPP_TOT'])) + '</td></tr><tr><th scope="row">OPP_LAND</th><td>' + Autolinker.link(String(feature.properties['OPP_LAND'])) + '</td></tr><tr><th scope="row">OPP_WATER</th><td>' + Autolinker.link(String(feature.properties['OPP_WATER'])) + '</td></tr><tr><th scope="row">BEV_DICHTH</th><td>' + Autolinker.link(String(feature.properties['BEV_DICHTH'])) + '</td></tr><tr><th scope="row">AANT_INW</th><td>' + Autolinker.link(String(feature.properties['AANT_INW'])) + '</td></tr><tr><th scope="row">AANT_MAN</th><td>' + Autolinker.link(String(feature.properties['AANT_MAN'])) + '</td></tr><tr><th scope="row">AANT_VROUW</th><td>' + Autolinker.link(String(feature.properties['AANT_VROUW'])) + '</td></tr><tr><th scope="row">P_0_14_JR</th><td>' + Autolinker.link(String(feature.properties['P_0_14_JR'])) + '</td></tr><tr><th scope="row">P_15_24_JR</th><td>' + Autolinker.link(String(feature.properties['P_15_24_JR'])) + '</td></tr><tr><th scope="row">P_25_44_JR</th><td>' + Autolinker.link(String(feature.properties['P_25_44_JR'])) + '</td></tr><tr><th scope="row">P_45_64_JR</th><td>' + Autolinker.link(String(feature.properties['P_45_64_JR'])) + '</td></tr><tr><th scope="row">P_65_EO_JR</th><td>' + Autolinker.link(String(feature.properties['P_65_EO_JR'])) + '</td></tr><tr><th scope="row">P_WEST_AL</th><td>' + Autolinker.link(String(feature.properties['P_WEST_AL'])) + '</td></tr><tr><th scope="row">P_N_W_AL</th><td>' + Autolinker.link(String(feature.properties['P_N_W_AL'])) + '</td></tr><tr><th scope="row">P_MARROK</th><td>' + Autolinker.link(String(feature.properties['P_MARROK'])) + '</td></tr><tr><th scope="row">P_ANT_ARU</th><td>' + Autolinker.link(String(feature.properties['P_ANT_ARU'])) + '</td></tr><tr><th scope="row">P_SURINAM</th><td>' + Autolinker.link(String(feature.properties['P_SURINAM'])) + '</td></tr><tr><th scope="row">P_TURKIJE</th><td>' + Autolinker.link(String(feature.properties['P_TURKIJE'])) + '</td></tr><tr><th scope="row">P_OVER_NW</th><td>' + Autolinker.link(String(feature.properties['P_OVER_NW'])) + '</td></tr><tr><th scope="row">AANTAL_HH</th><td>' + Autolinker.link(String(feature.properties['AANTAL_HH'])) + '</td></tr><tr><th scope="row">P_EENP_HH</th><td>' + Autolinker.link(String(feature.properties['P_EENP_HH'])) + '</td></tr><tr><th scope="row">P_HH_Z_K</th><td>' + Autolinker.link(String(feature.properties['P_HH_Z_K'])) + '</td></tr><tr><th scope="row">P_HH_M_K</th><td>' + Autolinker.link(String(feature.properties['P_HH_M_K'])) + '</td></tr><tr><th scope="row">GEM_HH_GR</th><td>' + Autolinker.link(String(feature.properties['GEM_HH_GR'])) + '</td></tr><tr><th scope="row">AUTO_TOT</th><td>' + Autolinker.link(String(feature.properties['AUTO_TOT'])) + '</td></tr><tr><th scope="row">AUTO_MUT</th><td>' + Autolinker.link(String(feature.properties['AUTO_MUT'])) + '</td></tr><tr><th scope="row">AUTO_HH</th><td>' + Autolinker.link(String(feature.properties['AUTO_HH'])) + '</td></tr><tr><th scope="row">AUTO_LAND</th><td>' + Autolinker.link(String(feature.properties['AUTO_LAND'])) + '</td></tr><tr><th scope="row">BEDR_AUTO</th><td>' + Autolinker.link(String(feature.properties['BEDR_AUTO'])) + '</td></tr><tr><th scope="row">MOTOR_2W</th><td>' + Autolinker.link(String(feature.properties['MOTOR_2W'])) + '</td></tr><tr><th scope="row">OAD</th><td>' + Autolinker.link(String(feature.properties['OAD'])) + '</td></tr><tr><th scope="row">STED</th><td>' + Autolinker.link(String(feature.properties['STED'])) + '</td></tr><tr><th scope="row">WW_UIT_TOT</th><td>' + Autolinker.link(String(feature.properties['WW_UIT_TOT'])) + '</td></tr><tr><th scope="row">P_WW_UIT</th><td>' + Autolinker.link(String(feature.properties['P_WW_UIT'])) + '</td></tr><tr><th scope="row">AO_UIT_TOT</th><td>' + Autolinker.link(String(feature.properties['AO_UIT_TOT'])) + '</td></tr><tr><th scope="row">P_AO_UIT</th><td>' + Autolinker.link(String(feature.properties['P_AO_UIT'])) + '</td></tr><tr><th scope="row">AO_UIT_MUT</th><td>' + Autolinker.link(String(feature.properties['AO_UIT_MUT'])) + '</td></tr><tr><th scope="row">WONINGEN</th><td>' + Autolinker.link(String(feature.properties['WONINGEN'])) + '</td></tr><tr><th scope="row">WOZ</th><td>' + Autolinker.link(String(feature.properties['WOZ'])) + '</td></tr><tr><th scope="row">AGRA_BEDR</th><td>' + Autolinker.link(String(feature.properties['AGRA_BEDR'])) + '</td></tr><tr><th scope="row">P_GEWASSEN</th><td>' + Autolinker.link(String(feature.properties['P_GEWASSEN'])) + '</td></tr><tr><th scope="row">P_VEETEELT</th><td>' + Autolinker.link(String(feature.properties['P_VEETEELT'])) + '</td></tr><tr><th scope="row">P_COMBI</th><td>' + Autolinker.link(String(feature.properties['P_COMBI'])) + '</td></tr><tr><th scope="row">BEDR_KLAS</th><td>' + Autolinker.link(String(feature.properties['BEDR_KLAS'])) + '</td></tr><tr><th scope="row">P_INDUSTRI</th><td>' + Autolinker.link(String(feature.properties['P_INDUSTRI'])) + '</td></tr><tr><th scope="row">P_COM_DV</th><td>' + Autolinker.link(String(feature.properties['P_COM_DV'])) + '</td></tr><tr><th scope="row">P_N_COM_DV</th><td>' + Autolinker.link(String(feature.properties['P_N_COM_DV'])) + '</td></tr><tr><th scope="row">Area_gem</th><td>' + Autolinker.link(String(feature.properties['Area_gem'])) + '</td></tr><tr><th scope="row">MPVV</th><td>' + Autolinker.link(String(feature.properties['MPVV'])) + '</td></tr><tr><th scope="row">Droogval</th><td>' + Autolinker.link(String(feature.properties['Droogval'])) + '</td></tr><tr><th scope="row">Zee</th><td>' + Autolinker.link(String(feature.properties['Zee'])) + '</td></tr><tr><th scope="row">Waterloop</th><td>' + Autolinker.link(String(feature.properties['Waterloop'])) + '</td></tr><tr><th scope="row">Alle_Water</th><td>' + Autolinker.link(String(feature.properties['Alle_Water'])) + '</td></tr><tr><th scope="row">PNTCNT</th><td>' + Autolinker.link(String(feature.properties['PNTCNT'])) + '</td></tr></table>';
+			layer.bindPopup(popupContent);
+		}
+
+		function doStyleGemLeptoRD(feature) {
+			if (feature.properties.PNTCNT >= -2.0 && feature.properties.PNTCNT <= -1.0) {
+				return {
+					color: '#000000',
+					weight: '1.3',
+					fillColor: '#edf8fb',
+					opacity: '1.0',
+					fillOpacity: '1.0',
+				}
+			}
+			if (feature.properties.PNTCNT >= -1.0 && feature.properties.PNTCNT <= -0.5) {
+				return {
+					color: '#000000',
+					weight: '1.3',
+					fillColor: '#bed5e7',
+					opacity: '1.0',
+					fillOpacity: '1.0',
+				}
+			}
+			if (feature.properties.PNTCNT >= -0.5 && feature.properties.PNTCNT <= 0.0) {
+				return {
+					color: '#000000',
+					weight: '1.3',
+					fillColor: '#9bacd1',
+					opacity: '1.0',
+					fillOpacity: '1.0',
+				}
+			}
+			if (feature.properties.PNTCNT >= 0.0 && feature.properties.PNTCNT <= 0.5) {
+				return {
+					color: '#000000',
+					weight: '1.3',
+					fillColor: '#8a7cb9',
+					opacity: '1.0',
+					fillOpacity: '1.0',
+				}
+			}
+			if (feature.properties.PNTCNT >= 0.5 && feature.properties.PNTCNT <= 1.0) {
+				return {
+					color: '#000000',
+					weight: '1.3',
+					fillColor: '#86479e',
+					opacity: '1.0',
+					fillOpacity: '1.0',
+				}
+			}
+			if (feature.properties.PNTCNT >= 1.0 && feature.properties.PNTCNT <= 2.0) {
+				return {
+					color: '#000000',
+					weight: '1.3',
+					fillColor: '#810f7c',
+					opacity: '1.0',
+					fillOpacity: '1.0',
+				}
+			}
+		}
+		var exp_GemLeptoRDJSON = new L.geoJson(exp_GemLeptoRD,{
+			onEachFeature: pop_GemLeptoRD,
+			style: doStyleGemLeptoRD
+		});
+		//add comment sign to hide this layer on the map in the initial view.
+		feature_group.addLayer(exp_GemLeptoRDJSON);
+
+		feature_group.addTo(map);
+		var title = new L.Control();
+		title.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+		};
+		title.update = function () {
+			this._div.innerHTML = '<h2>LeptoNL</h2>Cases per municipality'
+		};
+		title.addTo(map);
+		var legend = L.control({position: 'bottomright'});
+		legend.onAdd = function (map) {
+			var div = L.DomUtil.create('div', 'info legend');
+			div.innerHTML = "<h3>Legend</h3><table></table>";
+    		return div;
+		};
+		legend.addTo(map);
+	var baseMaps = {
+		'OpenMapSurfer roadsg': basemap_0
+	};
+		L.control.layers(baseMaps,{"GemLeptoRD": exp_GemLeptoRDJSON},{collapsed:false}).addTo(map);
+		L.control.scale({options: {position: 'bottomleft',maxWidth: 100,metric: true,imperial: false,updateWhenIdle: false}}).addTo(map);
+	</script>
+</body>
+</html>
